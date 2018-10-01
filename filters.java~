@@ -175,83 +175,83 @@ public class filters{
 						}
 					}
 					opfile="lennamerge"+Float.toString(alphaFloat);
-          			break;
+          break;
           
 				case 7:
-					Map< String,int[]> hm = new HashMap< String,int[]>();
-					hm.put("black", new int[]{0x00,0x00,0x00,0}); 
-					hm.put("red", new int[]{0xff,0x00,0x00,0}); 
-					hm.put("green", new int[]{0x00,0xff,0x00,0}); 
-					hm.put("blue", new int[]{0x00,0x00,0xff,0});
-					hm.put("yellow", new int[]{0xff,0xff,0x00,0}); 
-					hm.put("cyan", new int[]{0x00,0xff,0xff,0}); 
-					hm.put("magenta", new int[]{0xff,0x00,0xff,0});
-					hm.put("white", new int[]{0xff,0xff,0xff,0});
-					
-					
-					System.out.println("Enter kernel size");
+          Map< String,int[]> hm = new HashMap< String,int[]>();
+          hm.put("black", new int[]{0x00,0x00,0x00,0}); 
+          hm.put("red", new int[]{0xff,0x00,0x00,0}); 
+          hm.put("green", new int[]{0x00,0xff,0x00,0}); 
+          hm.put("blue", new int[]{0x00,0x00,0xff,0});
+          hm.put("yellow", new int[]{0xff,0xff,0x00,0}); 
+          hm.put("cyan", new int[]{0x00,0xff,0xff,0}); 
+          hm.put("magenta", new int[]{0xff,0x00,0xff,0});
+          hm.put("white", new int[]{0xff,0xff,0xff,0});
+          
+          
+          System.out.println("Enter kernel size");
 					kernel = input.nextInt();
 					offset= (kernel-1)/2;
 					for(int i=0;i<height;i++){
 						for(int j=0;j<width;j++){
-							int average_r=0, average_g=0, average_b=0,alpha=0;
-							int count =0;
-							for(int m=i-offset;(m<=i+offset);m++){
-								for(int n=j-offset;(n<=j+offset);n++){
-									if(m < 0 || n < 0 || m >= height || n >= width)
-										continue;
-									count++;
-									int pixel_val=img.getRGB(m,n);
-									alpha=(pixel_val>>24)&0xff;
-									int r=(pixel_val>>16)&0xff;
-									int g=(pixel_val>>8)&0xff;
-									int b=(pixel_val)&0xff;
-					
-									double min = 9999;
-									String cur = "";
-									Set< Map.Entry< String,int[]> > st = hm.entrySet();    
-
-									for (Map.Entry< String,int[]> me:st){ 
-										int r1 =me.getValue()[0];
-										int g1 =me.getValue()[1];
-										int b1 =me.getValue()[2];
-										double sum = (r1-r)*(r1-r) + (g1-g)*(g1-g) + (b1-b)*(b1-b);
-										// System.out.println(sum+"-"+Math.sqrt(sum));
-										if(min > Math.sqrt(sum)){
-											cur = me.getKey();
-											min = Math.sqrt(sum);
-										}
-									} 
-									// System.out.println("color"+cur);
-									int temp[] = hm.get(cur);
-									temp[3]++;
-									hm.put(cur,temp);
-									cur="";
-								}
-							}
-							// Set< Map.Entry< String,int[]> > st = hm.entrySet();
-							//   for (Map.Entry< String,int[]> me:st){ 
-							//     System.out.println(me.getKey()+me.getValue()[3]);
-							// }
-							int max = -1;
-							String cur = "";
-							Set< Map.Entry< String,int[]> > st = hm.entrySet();    
-							for (Map.Entry< String,int[]> me:st){ 
-								if(max < me.getValue()[3]){
-									cur = me.getKey();
-									max = me.getValue()[3];
-								}
-							}
-							int new_pixel_val=0xff<<24|hm.get(cur)[0]<<16|hm.get(cur)[1]<<8|hm.get(cur)[2];
-							result_img.setRGB(i,j,new_pixel_val);
-							hm.put("black", new int[]{0x00,0x00,0x00,0}); 
-							hm.put("red", new int[]{0xff,0x00,0x00,0}); 
-							hm.put("green", new int[]{0x00,0xff,0x00,0}); 
-							hm.put("blue", new int[]{0x00,0x00,0xff,0});
-							hm.put("yellow", new int[]{0xff,0xff,0x00,0}); 
-							hm.put("cyan", new int[]{0x00,0xff,0xff,0}); 
-							hm.put("magenta", new int[]{0xff,0x00,0xff,0});
-							hm.put("white", new int[]{0xff,0xff,0xff,0});                      
+              int average_r=0, average_g=0, average_b=0,alpha=0;
+								int count =0;
+								for(int m=i-offset;(m<=i+offset);m++){
+									for(int n=j-offset;(n<=j+offset);n++){
+										if(m < 0 || n < 0 || m >= height || n >= width)
+											continue;
+										count++;
+										int pixel_val=img.getRGB(m,n);
+										alpha=(pixel_val>>24)&0xff;
+										int r=(pixel_val>>16)&0xff;
+										int g=(pixel_val>>8)&0xff;
+                    int b=(pixel_val)&0xff;
+                    
+                    double min = 9999;
+                    String cur = "";
+                    Set< Map.Entry< String,int[]> > st = hm.entrySet();    
+  
+                    for (Map.Entry< String,int[]> me:st){ 
+                        int r1 =me.getValue()[0];
+                        int g1 =me.getValue()[1];
+                        int b1 =me.getValue()[2];
+                        double sum = (r1-r)*(r1-r) + (g1-g)*(g1-g) + (b1-b)*(b1-b);
+                        // System.out.println(sum+"-"+Math.sqrt(sum));
+                        if(min > Math.sqrt(sum)){
+                          cur = me.getKey();
+                          min = Math.sqrt(sum);
+                        }
+                    } 
+                    // System.out.println("color"+cur);
+                    int temp[] = hm.get(cur);
+                    temp[3]++;
+                    hm.put(cur,temp);
+                    cur="";
+									}
+                }
+                // Set< Map.Entry< String,int[]> > st = hm.entrySet();
+                //   for (Map.Entry< String,int[]> me:st){ 
+                //     System.out.println(me.getKey()+me.getValue()[3]);
+                // }
+                int max = -1;
+                String cur = "";
+                Set< Map.Entry< String,int[]> > st = hm.entrySet();    
+                    for (Map.Entry< String,int[]> me:st){ 
+                        if(max < me.getValue()[3]){
+                          cur = me.getKey();
+                          max = me.getValue()[3];
+                        }
+                    }
+								int new_pixel_val=0xff<<24|hm.get(cur)[0]<<16|hm.get(cur)[1]<<8|hm.get(cur)[2];
+                result_img.setRGB(i,j,new_pixel_val);
+                hm.put("black", new int[]{0x00,0x00,0x00,0}); 
+                hm.put("red", new int[]{0xff,0x00,0x00,0}); 
+                hm.put("green", new int[]{0x00,0xff,0x00,0}); 
+                hm.put("blue", new int[]{0x00,0x00,0xff,0});
+                hm.put("yellow", new int[]{0xff,0xff,0x00,0}); 
+                hm.put("cyan", new int[]{0x00,0xff,0xff,0}); 
+                hm.put("magenta", new int[]{0xff,0x00,0xff,0});
+                hm.put("white", new int[]{0xff,0xff,0xff,0});                      
 						}
 					}
 					opfile="lennamax1";
