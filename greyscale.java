@@ -64,8 +64,8 @@ public class greyscale{
 			File f1=null;
 			File f2=null;
 			try{
-				f1= new File("/home/aravind/javastuff/Images/lenna.png");
-				f2= new File("/home/aravind/javastuff/Images/landscape.jpeg");
+				f1= new File("./Images/lenna.png");
+				f2= new File("./Images/landscape.jpeg");
 				img=ImageIO.read(f1);
 				img2=ImageIO.read(f2);
 			}
@@ -174,17 +174,8 @@ public class greyscale{
 					}
 					opfile="lennamerge"+Float.toString(alpha);
 					break;
-				case 6:
-					System.out.println("Enter alpha between 0 - 1");
-					float alpha = input.nextFloat();
-					for(int y=0;y<height;y++){
-						for(int x=0;x<width;x++){
-							int pixel_val1=img.getRGB(x,y);
-							int pixel_val2=img2.getRGB(x,y);
-							int new_pixel_val=merger(pixel_val1,pixel_val2,alpha);
-							result_img.setRGB(x,y,new_pixel_val);
-						}
-					}
+				case 7:
+        Map< String,Integer> hm = new HashMap< String,Integer>();
 					opfile="lennamax";
 					break;
 				case 0:
@@ -195,7 +186,7 @@ public class greyscale{
 			}
 
 			try{
-				File outputfile= new File("/home/aravind/javastuff/Images/"+opfile+".png");
+				File outputfile= new File("./Images/"+opfile+".png");
 				ImageIO.write(result_img,"png",outputfile);
 			}
 			catch(IOException e){
