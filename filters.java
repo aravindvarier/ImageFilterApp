@@ -4,7 +4,7 @@ import java.awt.image.*;
 import javax.imageio.*;
 import java.util.Scanner;
 
-public class greyscale{
+public class filters{
 	public static int inverter(int px){
 		int alpha=(px>>24)&0xff;
 		int new_pixel_val=(0xffffffff-px)|0xff000000;
@@ -64,7 +64,7 @@ public class greyscale{
 			File f1=null;
 			File f2=null;
 			try{
-				f1= new File("./Images/lenna.png");
+				f1= new File("./Images/landscape.jpeg");
 				f2= new File("./Images/landscape.jpeg");
 				img=ImageIO.read(f1);
 				img2=ImageIO.read(f2);
@@ -74,11 +74,11 @@ public class greyscale{
 			}
 			int height = img.getHeight();
 			int width= img.getWidth();
-			BufferedImage result_img= new BufferedImage(width,height,6);
+			BufferedImage result_img= new BufferedImage(width,height,5);
 
 	
 			System.out.printf("Height is:%d\t Width is:%d\n",height, width);
-			System.out.println("0. Exit 1. Greyscale 2. Invert 3. OnlyRed 4. Sepia 5.Blur 6.Merge");
+			System.out.println("0. Exit 1. Greyscale 2. Invert 3. OnlyRed 4. Sepia 5.Blur 6.Merge 8.Otsu Thresholding");
 			System.out.println("Enter your choice");
 			Scanner input = new Scanner(System.in);
 			int number = input.nextInt();
@@ -175,8 +175,71 @@ public class greyscale{
 					opfile="lennamerge"+Float.toString(alpha);
 					break;
 				case 7:
-        Map< String,Integer> hm = new HashMap< String,Integer>();
-					opfile="lennamax";
+					break;
+				case 8:	
+					int t;
+					BufferedImage greyscale= new BufferedImage(width,height,5);
+					BufferedImage bwimage= new BufferedImage(width,height,5);
+					for(int y=0;y<height;y++){
+						for(int x=0;x<width;x++){
+							int pixel_val=img.getRGB(x,y);
+							int new_pixel_val=grey_maker(pixel_val);
+							greyscale.setRGB(x,y,new_pixel_val);
+						}
+					}
+					int hist[]=new int[256];
+					float bcv[]=new float[256];
+					for(int i=0;i<256;i++)
+						bcv[i]=0;
+					int max_index=0;
+					for(int y=0;y<height;y++){
+						for(int x=0;x<width;x++){
+							int pixel_val=greyscale.getRGB(x,y);
+							int r=(pixel_val>>16)&0xff;
+							hist[r]++;
+						}
+					}
+					
+					for(t=0;t<256;t++){
+						float wb=0,wf=0,meanb=0,meanf=0;
+						for(int i=0;i<t;i++){
+							wb+=hist[i];
+							meanb+=(i*hist[i]);
+						}
+						if(wb!=0)
+							meanb/=wb;
+						else
+							meanb=0;
+						wb/=(width*height);
+
+						for(int i=t;i<256;i++){
+							wf+=hist[i];
+							meanf+=(i*hist[i]);
+						}
+						if(wf!=0)
+							meanf/=wf;
+						else
+							meanf=0;
+						wf/=(width*height);
+						bcv[t]=(wb*wf)*(meanb-meanf)*(meanb-meanf);
+						if(bcv[t]>=bcv[max_index])
+							max_index=t;
+					}
+					System.out.println(max_index);
+					for(int y=0;y<height;y++){
+						for(int x=0;x<width;x++){
+							int pixel_val=greyscale.getRGB(x,y);
+							int r=(pixel_val>>16)&0xff;
+							int new_pixel_val;
+							if(r>max_index)
+								new_pixel_val=0xffffffff;
+							else
+								new_pixel_val=0x00000000;
+							bwimage.setRGB(x,y,new_pixel_val);
+						}
+					}
+					result_img=bwimage;
+					opfile="otsu";
 					break;
 				case 0:
 					System.exit(0);
