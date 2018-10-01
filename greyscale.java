@@ -64,8 +64,8 @@ public class greyscale{
 			File f1=null;
 			File f2=null;
 			try{
-				f1= new File("/home/aravind/javastuff/lenna.png");
-				f2= new File("/home/aravind/javastuff/landscape.jpeg");
+				f1= new File("/home/aravind/javastuff/Images/lenna.png");
+				f2= new File("/home/aravind/javastuff/Images/landscape.jpeg");
 				img=ImageIO.read(f1);
 				img2=ImageIO.read(f2);
 			}
@@ -195,7 +195,7 @@ public class greyscale{
 			}
 
 			try{
-				File outputfile= new File("/home/aravind/javastuff/"+opfile+".png");
+				File outputfile= new File("/home/aravind/javastuff/Images/"+opfile+".png");
 				ImageIO.write(result_img,"png",outputfile);
 			}
 			catch(IOException e){
